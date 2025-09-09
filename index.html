@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balatro NFC Companion</title>
-    <link rel="stylesheet" href="style.css">
-    
     <style>
-        .splash-only {
+        @font-face {
+            font-family: 'm6x11Plus';
+            src: url('assets/m6x11plus.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             font-family: 'm6x11Plus', monospace;
             overflow: hidden;
             height: 100vh;
         }
+
         #start-screen {
             display: flex;
             flex-direction: column;
@@ -22,36 +32,229 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100% );
+            
+            /* Balatro-style gradient background */
+            background: linear-gradient(135deg, 
+                #2a3d42 0%, 
+                #374244 25%, 
+                #3a5055 50%, 
+                #374244 75%, 
+                #2a3d42 100%
+            );
+            
+            /* Adding some texture/noise effect */
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+            
             z-index: 9999;
             text-align: center;
             color: #fff;
         }
-        .logo-container { margin-bottom: 3rem; position: relative; }
-        .logo { max-width: 400px; width: 80vw; height: auto; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)); animation: logoGlow 3s ease-in-out infinite alternate; }
+
+        /* Animated background pattern */
+        #start-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, rgba(255, 255, 255, 0.005) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.005) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.005) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.005) 75%);
+            background-size: 60px 60px;
+            background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+            animation: backgroundShift 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(60px) translateY(60px); }
+        }
+
+        .logo-container {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .logo {
+            max-width: 400px;
+            width: 80vw;
+            height: auto;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
         @keyframes logoGlow {
-            0% { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 20px rgba(255, 64, 64, 0.3)); }
-            100% { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 30px rgba(64, 157, 255, 0.4)); }
+            0% {
+                filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) 
+                        drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+            }
+            100% {
+                filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) 
+                        drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+            }
         }
-        .title { font-size: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 1rem; color: #bfc7d5; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); letter-spacing: 2px; }
-        .subtitle { font-size: clamp(0.9rem, 2.5vw, 1.2rem); margin-bottom: 3rem; color: #8e9aaf; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); max-width: 600px; line-height: 1.4; }
-        .start-button { background: linear-gradient(145deg, #ff4040, #ff2020); color: white; font-family: 'm6x11Plus', monospace; font-size: clamp(1.2rem, 3vw, 1.8rem); padding: 1rem 3rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 0 #cc0000, 0 8px 20px rgba(0, 0, 0, 0.4); }
-        .floating-card { position: absolute; width: 71px; height: 94px; background-size: 710px 950px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); animation: float 6s ease-in-out infinite; image-rendering: pixelated; border: 2px solid rgba(255, 255, 255, 0.1); --parallax-x: 0px; --parallax-y: 0px; }
-        .floating-card.joker { background-image: url('assets/Jokers.png'); }
-        .floating-card.playing-card { background-image: url('assets/8BitDeck.png'); }
-        .floating-card:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .floating-card:nth-child(2) { top: 20%; right: 15%; animation-delay: -2s; }
-        .floating-card:nth-child(3) { bottom: 15%; left: 8%; animation-delay: -4s; }
-        .floating-card:nth-child(4) { bottom: 25%; right: 12%; animation-delay: -1s; }
+
+        .title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+            color: #bfc7d5;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+            margin-bottom: 3rem;
+            color: #8e9aaf;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        .start-button {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-family: 'm6x11Plus', monospace;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 6px 0 #c0392b,
+                0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent
+            );
+            transition: left 0.5s;
+        }
+
+        .start-button:hover::before {
+            left: 100%;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 0 #c0392b,
+                0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .start-button:active {
+            transform: translateY(2px);
+            box-shadow: 
+                0 2px 0 #c0392b,
+                0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Floating card decorations */
+        .floating-card {
+            position: absolute;
+            width: 60px;
+            height: 84px;
+            background: linear-gradient(145deg, #4a5c68, #374244);
+            border-radius: 8px;
+            border: 2px solid #5f7377;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-card:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-card:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            animation-delay: -2s;
+        }
+
+        .floating-card:nth-child(3) {
+            bottom: 15%;
+            left: 8%;
+            animation-delay: -4s;
+        }
+
+        .floating-card:nth-child(4) {
+            bottom: 25%;
+            right: 12%;
+            animation-delay: -1s;
+        }
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(-3deg) translate(var(--parallax-x), var(--parallax-y)); opacity: 0.7; }
-            50% { transform: translateY(-20px) rotate(5deg) translate(var(--parallax-x), var(--parallax-y)); opacity: 0.9; }
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+                opacity: 0.8;
+            }
         }
-        @media (max-width: 480px) { .floating-card { display: none; } }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .subtitle {
+                padding: 0 1rem;
+            }
+            
+            .start-button {
+                padding: 0.8rem 2rem;
+                font-size: 1.1rem;
+            }
+            
+            .floating-card {
+                width: 40px;
+                height: 56px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                width: 90vw;
+            }
+            
+            .title {
+                font-size: 1.3rem;
+            }
+            
+            .floating-card {
+                display: none;
+            }
+        }
+
+        /* Hide calculator UI initially */
+        #calculator-ui {
+            display: none;
+        }
     </style>
 </head>
-<body class="splash-only">
-
+<body>
+    <!-- Floating decorative cards -->
     <div class="floating-card"></div>
     <div class="floating-card"></div>
     <div class="floating-card"></div>
@@ -59,108 +262,48 @@
 
     <div id="start-screen">
         <div class="logo-container">
-             <img src="assets/bblogo.png" alt="Balatro Logo" class="logo">
+            <img src="assets/bblogo.png" alt="BBalatro Logo" class="logo">
         </div>
         <h1 class="title">NFC Companion</h1>
         <p class="subtitle">
             Experience Balatro with physical NFC cards.<br>
             Tap your cards to interact with the digital world.
         </p>
-        <button id="startGameButton" class="start-button">Start Game</button>
+        <button id="startGameButton" class="start-button">
+            Start Game
+        </button>
     </div>
 
     <div id="calculator-ui">
-        <div id="animation-container">
-            <video id="animation-player" width="400" height="400" muted playsinline></video>
-        </div>
-        <div id="status-display">Game Started! Tap a Joker.</div>
+        <!-- Your existing calculator UI content goes here -->
         <div id="mainContainer">
             <div id="containerLeft">
-                <div class="toggleArea" style="margin-bottom: 1em"><div id="toggleJoker" class="handLevel"><span id="toggleJokerBtn" class="lvlBtn" onclick="toggleJoker()">X</span><span class="handName">Optimize Jokers (slow)</span></div></div>
-                <div class="toggleArea" style="margin-bottom: 1em"><div id="toggleCard" class="handLevel"><span id="toggleCardBtn" class="lvlBtn" onclick="toggleCard()">X</span><span class="handName">Optimize Hand (slow)</span></div></div>
-                <div id="jokerArea"></div>
-                <span class='limitText'><span id='jokerLimit'>0</span>/7</span><br>
-                <div id="scoreOfPlay" style="font-size: 2em"><div id="bestPlayName">High Card<span class="nameLvl"> lvl.1</span></div><div id="bestPlayScore"><span class="chipIcon"></span>5</div><div id="bestPlayScoreX" class="levelStat" style="position: static; margin: auto; margin-top: 0.125em;"><span id="scoreChips" class="levelStatB">5</span>X<span id="scoreMult" class="levelStatR">1</span></div></div>
-                <div id="bestPlay"></div>
-                <div id="cardsInHand"></div>
-                <span class='limitText'><span id='handLimit'>0</span>/8</span><br>
-                <div class="toggleArea" style="margin-bottom: 1em">
-                    <div id="toggleMinimize" class="handLevel"><span id="toggleMinimizeBtn" class="lvlBtn" onclick="toggleMinimize()">&nbsp;</span><span class="handName">Minimize Score</span></div>
-                    <div id="toggleTheFlint" class="handLevel"><span id="toggleTheFintBtn" class="lvlBtn" onclick="toggleTheFlint()">&nbsp;</span><span class="handName">The Flint</span></div>
-                    <div id="toggleTheEye" class="handLevel"><span id="toggleTheEyeBtn" class="lvlBtn" onclick="toggleTheEye()">&nbsp;</span><span class="handName">Can't play checked hands (The Eye)</span></div>
-                    <div id="togglePlasma" class="handLevel"><span id="togglePlasmaBtn" class="lvlBtn" onclick="togglePlasma()">&nbsp;</span><span class="handName">Plasma Deck</span></div>
-                    <div id="toggleObservatory" class="handLevel"><span id="toggleObservatoryBtn" class="lvlBtn" onclick="toggleObservatory()">&nbsp;</span><span class="handName">Observatory</span></div>
-                    <div id="consumables" style="display: none"></div>
-                </div>
-                <button type="button" class="resetBtn" onClick="playHand()">Play hand</button>
-                <button type="button" class="resetBtn" onClick="clearHand()">Clear hand</button>
-                <button type="button" class="resetBtn" onClick="resetHand()">Reset</button>
+                <h2>Game Interface</h2>
+                <p>Your calculator UI will appear here after clicking Start Game.</p>
             </div>
-            <div id="containerRight">
-                <div class="menuBtns"><span class="menuBtn" id="JokersBtn">Jokers</span><span class="menuBtn" id="CardsBtn">Cards</span><span class="menuBtn" id="HandsBtn">Hands</span><span class="menuBtn" id="BreakdownBtn">Breakdown</span><span class="menuBtn" id="ModifyJokerBtn" style="display: none;">Edit</span></div>
-                <div id="Jokers"><div style="text-align: center;"><div id="jokerCount" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementJokerCount(-1)">-</span><span class="lvlBtn" onclick="incrementJokerCount( 0)">1</span><span class="lvlBtn" onclick="incrementJokerCount( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Count</span><span contenteditable="true" id="jokerCnt" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setJokerCount()" onfocus="selectAll(this)">1</span></div></div><div style="text-align: center;"><div id="jokerValue" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementJokerValue(-1)">-</span><span class="lvlBtn" onclick="incrementJokerValue( 0)">0</span><span class="lvlBtn" onclick="incrementJokerValue( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Value</span><span contenteditable="true" id="jokerVal" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setJokerValue()" onfocus="selectAll(this)">0</span></div></div><div style="text-align: center;"><div id="jokerSearch" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Search</span><input id="SearchVal" class="handLvl" type="text" oninput="searchJoker()" placeholder="Joker Name" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;"></div></div><div id="jokerModifiers" style="text-align: center;"></div><div id="jokers" style="text-align: center"></div></div>
-                <div id="Cards"><div style="text-align: center;"><div id="cardCount" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementCardCount(-1)">-</span><span class="lvlBtn" onclick="incrementCardCount( 0)">1</span><span class="lvlBtn" onclick="incrementCardCount( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Count</span><span contenteditable="true" id="cardCnt" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setCardCount()" onfocus="selectAll(this)">1</span></div></div><div id="handModifiers" style="text-align: center;width:100%;"></div><div id="cards" style="text-align: center"></div><div style="text-align: center;"><div class="handLevel"><span id="highContrastBtn" class="lvlBtn">&nbsp;</span><span class="handName">High Contrast</span></div></div></div>
-                <div id="Hands"><div id="hands" style="text-align: center"></div><button type="button" class="resetBtn" onclick="invertPlayedHands()" style="margin-top:0.5em">Invert played hands</button></div>
-                <div id="Breakdown"></div>
-                <div id="ModifyJoker"><div style="text-align: center;"><div id="modifyJokerValue" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementModifyJokerValue(-1)">-</span><span class="lvlBtn" onclick="incrementModifyJokerValue( 0)">0</span><span class="lvlBtn" onclick="incrementModifyJokerValue( 1)">+</span><span id="modValue" style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Value</span><span contenteditable="true" id="modifyJokerVal" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setModifyJokerValue()">0</span></div></div><div style="text-align: center;"><div id="modifyJokerSellValue" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementModifyJokerSellValue(-1)">-</span><span class="lvlBtn" onclick="incrementModifyJokerSellValue( 0)">0</span><span class="lvlBtn" onclick="incrementModifyJokerSellValue( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Sell</span><span contenteditable="true" id="modifyJokerSellVal" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setModifyJokerSellValue()">0</span></div></div><div id="modifyJokerModifiers" style="text-align: center;"></div><div id="modifyJoker" style="text-align: center"></div></div>
-            </div>
-        </div>
-        <div id="footer">
-            <a href='https://www.playbalatro.com/' alt='Balatro Website'><img src='assets/Balatro logo-new.png' style='height: 3em;'></a><br>
-            <a href='https://www.github.com/EFHIII/balatro-calculator'>view code on GitHub</a>
         </div>
     </div>
 
-    <audio id="background-music" loop src="assets/Balatro Main Theme.mp3"></audio>
-    <audio id="play-hand-sfx" src="sfx/your-sound-effect.wav"></audio>
-
-    <script type="text/javascript" src="hoverCard.js"></script>
-    <script type="text/javascript" src="cards.js"></script>
-    <script type="text/javascript" src="breakdown.js"></script>
-    <script type="text/javascript" src="manageWorkers.js"></script>
-    <script type="text/javascript" src="main.js"></script>
-    <script type="text/javascript" src="hand-url.js"></script>
-    <script src="nfc_handler.js"></script>
-
     <script>
-        const jokerDatabase = [ { pos: [0, 0] }, { pos: [1, 0] }, { pos: [2, 0] }, { pos: [3, 0] }, { pos: [4, 0] }, { pos: [5, 0] }, { pos: [6, 0] }, { pos: [7, 0] }, { pos: [8, 0] }, { pos: [9, 0] }, { pos: [0, 1] }, { pos: [1, 1] }, { pos: [2, 1] }, { pos: [3, 1] }, { pos: [4, 1] }, { pos: [5, 1] }, { pos: [6, 1] }, { pos: [7, 1] }, { pos: [8, 1] }, { pos: [9, 1] } ];
-        const playingCardDatabase = [ { pos: [0, 0] }, { pos: [1, 0] }, { pos: [2, 0] }, { pos: [3, 0] }, { pos: [4, 0] }, { pos: [5, 0] }, { pos: [6, 0] }, { pos: [7, 0] }, { pos: [8, 0] }, { pos: [9, 0] }, { pos: [10, 0] }, { pos: [11, 0] }, { pos: [12, 0] }, { pos: [0, 1] }, { pos: [1, 1] }, { pos: [2, 1] }, { pos: [3, 1] }, { pos: [4, 1] }, { pos: [5, 1] }, { pos: [6, 1] }, { pos: [7, 1] }, { pos: [8, 1] }, { pos: [9, 1] }, { pos: [10, 1] }, { pos: [11, 1] }, { pos: [12, 1] } ];
-        
-        function initializeFloatingCards() {
-            const cards = document.querySelectorAll('.floating-card');
-            cards.forEach(card => updateCardDisplay(card));
-            setInterval(() => {
-                const randomCardEl = cards[Math.floor(Math.random() * cards.length)];
-                updateCardDisplay(randomCardEl);
-            }, 4000);
-        }
+        document.getElementById('startGameButton').addEventListener('click', function() {
+            // Hide start screen and show calculator UI
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('calculator-ui').style.display = 'block';
+            
+            // Initialize your game here
+            console.log('Game started!');
+        });
 
-        function updateCardDisplay(cardElement) {
-            const isJoker = Math.random() > 0.4;
-            if (isJoker) {
-                const randomJoker = jokerDatabase[Math.floor(Math.random() * jokerDatabase.length)];
-                cardElement.style.backgroundPosition = `${randomJoker.pos[0] * -71}px ${randomJoker.pos[1] * -94}px`;
-                cardElement.className = 'floating-card joker';
-            } else {
-                const randomCard = playingCardDatabase[Math.floor(Math.random() * playingCardDatabase.length)];
-                const randomSuitRow = Math.floor(Math.random() * 4);
-                cardElement.style.backgroundPosition = `${randomCard.pos[0] * -71}px ${randomSuitRow * -95}px`;
-                cardElement.className = 'floating-card playing-card';
-            }
-        }
-
+        // Add some interactive effects
         document.addEventListener('mousemove', function(e) {
             const cards = document.querySelectorAll('.floating-card');
             cards.forEach((card, index) => {
-                const speed = (index + 1) * 0.003 + 0.002;
-                const x = (window.innerWidth / 2 - e.pageX) * speed;
-                const y = (window.innerHeight / 2 - e.pageY) * speed;
-                card.style.setProperty('--parallax-x', `${x}px`);
-                card.style.setProperty('--parallax-y', `${y}px`);
+                const speed = (index + 1) * 0.0001;
+                const x = (window.innerWidth - e.pageX * speed) / 100;
+                const y = (window.innerHeight - e.pageY * speed) / 100;
+                card.style.transform += ` translate(${x}px, ${y}px)`;
             });
         });
-        
-        window.addEventListener('load', initializeFloatingCards);
     </script>
 </body>
 </html>
