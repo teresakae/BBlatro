@@ -33,12 +33,6 @@ DYN_UI = {
     BOSS_PALE = HEX('374244')
 },
 */
-
-@font-face {
-  font-family: 'm6x11Plus';
-  src: url('assets/m6x11plus.ttf') format('truetype');
-}
-
 #start-screen {
     display: flex;
     flex-direction: column;
@@ -55,8 +49,13 @@ DYN_UI = {
 }
 
 #calculator-ui {
-    /* This will be changed to display:flex by our script */
-    display: none;
+    /* This will be changed by our script */
+    display: none; 
+}
+
+@font-face {
+  font-family: 'm6x11Plus';
+  src: url('assets/m6x11plus.ttf') format('truetype');
 }
 
 body {
