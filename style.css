@@ -749,7 +749,32 @@ input {
   margin-bottom: 1em;
   vertical-align: middle;
 }
+#animation-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    display: none; /* default hidden */
+    z-index: 1000; /* on top\ */
+    pointer-events: none; /* doesnt block clicks */
+}
+
+#status-display {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-family: sans-serif;
+    z-index: 1001;
+}
 
 .resetBtn:hover {
   background-color: #df2d20;
 }
+

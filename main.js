@@ -1234,3 +1234,70 @@ function clearHand() {
 function resetHand() {
   window.location.replace('/balatro-calculator');
 }
+  
+/**
+ * Finds and plays a video animation.
+ * @param {string} videoPath - The relative path to the video file.
+ */
+function playAnimation(videoPath) {
+    const animationContainer = document.getElementById('animation-container');
+    const videoPlayer = document.getElementById('animation-player');
+    
+    // Hide the animation when it's done playing
+    videoPlayer.onended = () => {
+        animationContainer.style.display = 'none';
+    };
+
+    animationContainer.style.display = 'block';
+    videoPlayer.src = videoPath;
+    videoPlayer.currentTime = 0;
+    videoPlayer.play();
+}
+
+
+// Your other new functions (processNfcTap, addScannedJoker) go here...
+function processNfcTap(scannedID) {
+    // ...
+}
+function addScannedJoker(jokerName) {
+    // ...
+}
+/**
+ * Main entry point for processing an NFC card tap.
+ * Called by the nfc_handler.js
+ * @param {string} scannedID - The text data read from the NFC tag (e.g., "joker:Greedy Joker").
+ */
+function processNfcTap(scannedID) {
+    const parts = scannedID.split(':');
+    const cardType = parts[0];
+    const cardName = parts[1];
+
+    if (cardType === 'joker') {
+        // --- Animation Logic ---
+        // Create a simple name for the video file, e.g., "Greedy Joker" -> "greedy_joker.mp4"
+        const videoFileName = cardName.toLowerCase().replace(/ /g, '_') + '.mp4';
+        playAnimation('animations/' + videoFileName); // Assumes videos are in an 'animations' folder
+
+        // --- Game Logic ---
+        addScannedJoker(cardName);
+    } 
+    // You can add logic for "planet" cards here later if you want.
+}
+
+/**
+ * Finds a Joker by its name and calls the existing addJoker function.
+ * @param {string} jokerName - The name of the Joker (e.g., "Greedy Joker").
+ */
+function addScannedJoker(jokerName) {
+    for (let i = 0; i < jokerTexts.length; i++) {
+        if (!jokerTexts[i]) continue; // Skip empty rows
+        for (let j = 0; j < jokerTexts[i].length; j++) {
+            if (jokerTexts[i][j][0] === jokerName) {
+                console.log(`Found Joker: ${jokerName} at coordinates [${i}, ${j}]`);
+                addJoker(i, j); // This calls the existing function from this file
+                return; 
+            }
+        }
+    }
+    console.warn(`Could not find Joker with name: ${jokerName}`);
+}

@@ -439,4 +439,15 @@ const jokerTexts = [
     ['Walkie Talkie', 'Each played ${numc}10${endc} or ${numc}4${endc}<br>gives ${chipc}+10${endc} Chips and<br>${multc}+4${endc} Mult when scored'],
     ['Castle', 'This Joker gains ${chipc}+3${endc} Chips<br>per discarded ${[heartc, clubc, diamondc, spadec][Math.abs(jokerValue) % 4]} card,<br>suit changes every round<br>${shadowc}(Currently ${chipc}+${jokerValue * 3}${endc} Chips)${endc}', 'Matching Discarded Cards']
   ]
+,
+[
+    ['nubcat', 'Copies ability of<br>${numc}Joker${endc} to the right'], // Blueprint
+    ['banyenyo', '${multc}+15${endc} Mult<br>${probc}1 in 6${endc} chance this card is destroyed<br>at the end of the round'], // Gros Michel
+    ['kirby', 'If ${numc}first hand${endc} of round<br>has only ${numc}1${endc} card, add a<br>permanent copy to deck<br>and draw it to ${numc}hand${endc}'], // DNA
+    ['carboard', '${prodc}3${endc} Mult if all<br>cards held in hand<br>are ${spadec} or ${clubc}'], // Mapped to Blackboard
+    ['classic', '${multc}+4${endc} Mult'] // normal Joker
+]
+
 ];
+
+

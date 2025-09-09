@@ -22,6 +22,11 @@
     gtag('config', 'G-4XT7X7MPCG');
   </script>
   <body>
+    <audio id="background-music" loop src="assets/Balatro Main Theme.mp3"></audio>
+<div id="animation-container">
+    <video id="animation-player" width="400" height="400" muted playsinline></video>
+    </div>
+<div id="status-display">Waiting to start... Tap your "Start Game" card.</div>
     <div id="mainContainer">
       <div id="containerLeft">
         <div class="toggleArea" style="margin-bottom: 1em">
@@ -71,7 +76,7 @@
         </div>
         <div id="consumables" style="display: none"></div>
       </div>
-      <a href="https://discord.gg/ARHq4BbyjY"><img src="assets/Discord-Logo-Color.svg" style="height: 48px; position: relative"></a>
+      <button type="button" id="startGameButton" class="resetBtn">Start Game Session</button>
       <button type="button" class="resetBtn" onClick="playHand()">Play hand</button>
       <button type="button" class="resetBtn" onClick="clearHand()">Clear hand</button>
       <button type="button" class="resetBtn" onClick="resetHand()">Reset</button>
@@ -229,5 +234,6 @@
     <script type="text/javascript" src="manageWorkers.js"></script>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="hand-url.js"></script>
+    <script src="nfc_handler.js"></script>
   </body>
 </html>
