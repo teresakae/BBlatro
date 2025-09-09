@@ -4,24 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balatro NFC Companion</title>
+    <link rel="stylesheet" href="style.css">
+    
     <style>
-        @font-face {
-            font-family: 'm6x11Plus';
-            src: url('assets/m6x11plus.ttf') format('truetype');
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
+        .splash-only {
             font-family: 'm6x11Plus', monospace;
             overflow: hidden;
             height: 100vh;
         }
-
         #start-screen {
             display: flex;
             flex-direction: column;
@@ -32,294 +22,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            
-            /* Balatro-style pixel art background */
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(255, 64, 64, 0.3) 0%, transparent 30%),
-                radial-gradient(circle at 75% 75%, rgba(64, 157, 255, 0.2) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(255, 143, 0, 0.15) 0%, transparent 25%),
-                linear-gradient(135deg, 
-                    #1a1a2e 0%, 
-                    #16213e 25%, 
-                    #0f3460 50%, 
-                    #533483 75%, 
-                    #7209b7 100%
-                );
-            
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100% );
             z-index: 9999;
             text-align: center;
             color: #fff;
         }
-
-        /* Pixel art pattern overlay */
-        #start-screen::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                /* Large pixels */
-                linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
-                linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
-                linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
-                /* Small pixels */
-                linear-gradient(90deg, rgba(255, 64, 64, 0.1) 50%, transparent 50%),
-                linear-gradient(0deg, rgba(64, 157, 255, 0.1) 50%, transparent 50%);
-            background-size: 
-                40px 40px,
-                40px 40px,
-                40px 40px,
-                40px 40px,
-                8px 8px,
-                8px 8px;
-            background-position: 
-                0 0, 
-                0 20px, 
-                20px -20px, 
-                -20px 0px,
-                0 0,
-                4px 4px;
-            animation: pixelShift 25s linear infinite;
-            z-index: -1;
-        }
-
-        /* Animated scanlines */
-        #start-screen::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.1) 2px,
-                rgba(0, 0, 0, 0.1) 4px
-            );
-            animation: scanlines 8s ease-in-out infinite alternate;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        @keyframes pixelShift {
-            0% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(20px) translateY(-10px); }
-            50% { transform: translateX(-10px) translateY(20px); }
-            75% { transform: translateX(15px) translateY(15px); }
-            100% { transform: translateX(0) translateY(0); }
-        }
-
-        @keyframes scanlines {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.1; }
-        }
-
-        .logo-container {
-            margin-bottom: 3rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo {
-            max-width: 400px;
-            width: 80vw;
-            height: auto;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
-            animation: logoGlow 3s ease-in-out infinite alternate;
-        }
-
+        .logo-container { margin-bottom: 3rem; position: relative; }
+        .logo { max-width: 400px; width: 80vw; height: auto; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)); animation: logoGlow 3s ease-in-out infinite alternate; }
         @keyframes logoGlow {
-            0% {
-                filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) 
-                        drop-shadow(0 0 20px rgba(255, 64, 64, 0.3));
-            }
-            100% {
-                filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) 
-                        drop-shadow(0 0 30px rgba(64, 157, 255, 0.4));
-            }
+            0% { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 20px rgba(255, 64, 64, 0.3)); }
+            100% { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 30px rgba(64, 157, 255, 0.4)); }
         }
-
-        .title {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            margin-bottom: 1rem;
-            color: #bfc7d5;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            letter-spacing: 2px;
-            z-index: 2;
-            position: relative;
-        }
-
-        .subtitle {
-            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-            margin-bottom: 3rem;
-            color: #8e9aaf;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            max-width: 600px;
-            line-height: 1.4;
-            z-index: 2;
-            position: relative;
-        }
-
-        .start-button {
-            background: linear-gradient(145deg, #ff4040, #ff2020);
-            color: white;
-            font-family: 'm6x11Plus', monospace;
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            padding: 1rem 3rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 
-                0 6px 0 #cc0000,
-                0 8px 20px rgba(0, 0, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
-            image-rendering: pixelated;
-        }
-
-        .start-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent
-            );
-            transition: left 0.5s;
-        }
-
-        .start-button:hover::before {
-            left: 100%;
-        }
-
-        .start-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                0 8px 0 #cc0000,
-                0 12px 25px rgba(0, 0, 0, 0.5);
-        }
-
-        .start-button:active {
-            transform: translateY(2px);
-            box-shadow: 
-                0 2px 0 #cc0000,
-                0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .floating-card {
-            position: absolute;
-            width: 71px;
-            height: 94px;
-            background-size: 710px 1504px;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            animation: float 6s ease-in-out infinite;
-            image-rendering: pixelated;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            
-            --parallax-x: 0px;
-            --parallax-y: 0px;
-        }
-
-        .floating-card.joker {
-            background-image: url('assets/Jokers.png');
-        }
-
-        .floating-card.playing-card {
-            background-image: url('assets/8BitDeck.png');
-        }
-
-        .floating-card:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-card:nth-child(2) {
-            top: 20%;
-            right: 15%;
-            animation-delay: -2s;
-        }
-
-        .floating-card:nth-child(3) {
-            bottom: 15%;
-            left: 8%;
-            animation-delay: -4s;
-        }
-
-        .floating-card:nth-child(4) {
-            bottom: 25%;
-            right: 12%;
-            animation-delay: -1s;
-        }
-
+        .title { font-size: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 1rem; color: #bfc7d5; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); letter-spacing: 2px; }
+        .subtitle { font-size: clamp(0.9rem, 2.5vw, 1.2rem); margin-bottom: 3rem; color: #8e9aaf; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); max-width: 600px; line-height: 1.4; }
+        .start-button { background: linear-gradient(145deg, #ff4040, #ff2020); color: white; font-family: 'm6x11Plus', monospace; font-size: clamp(1.2rem, 3vw, 1.8rem); padding: 1rem 3rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 0 #cc0000, 0 8px 20px rgba(0, 0, 0, 0.4); }
+        .floating-card { position: absolute; width: 71px; height: 94px; background-size: 710px 950px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); animation: float 6s ease-in-out infinite; image-rendering: pixelated; border: 2px solid rgba(255, 255, 255, 0.1); --parallax-x: 0px; --parallax-y: 0px; }
+        .floating-card.joker { background-image: url('assets/Jokers.png'); }
+        .floating-card.playing-card { background-image: url('assets/8BitDeck.png'); }
+        .floating-card:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-card:nth-child(2) { top: 20%; right: 15%; animation-delay: -2s; }
+        .floating-card:nth-child(3) { bottom: 15%; left: 8%; animation-delay: -4s; }
+        .floating-card:nth-child(4) { bottom: 25%; right: 12%; animation-delay: -1s; }
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg) translate(var(--parallax-x), var(--parallax-y));
-                opacity: 0.7;
-            }
-            50% {
-                transform: translateY(-20px) rotate(5deg) translate(var(--parallax-x), var(--parallax-y));
-                opacity: 0.9;
-            }
+            0%, 100% { transform: translateY(0px) rotate(-3deg) translate(var(--parallax-x), var(--parallax-y)); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(5deg) translate(var(--parallax-x), var(--parallax-y)); opacity: 0.9; }
         }
-
-        @media (max-width: 768px) {
-            .subtitle {
-                padding: 0 1rem;
-            }
-            .start-button {
-                padding: 0.8rem 2rem;
-                font-size: 1.1rem;
-            }
-            .floating-card {
-                width: 56px;
-                height: 75px;
-                background-size: 560px 1200px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                width: 90vw;
-            }
-            .title {
-                font-size: 1.3rem;
-            }
-            .floating-card {
-                display: none;
-            }
-        }
-
-        #calculator-ui {
-            display: none;
-            background: linear-gradient(135deg, 
-                #1a1a2e 0%, 
-                #16213e 25%, 
-                #0f3460 50%, 
-                #533483 75%, 
-                #7209b7 100%
-            );
-            color: white;
-            padding: 2rem;
-            min-height: 100vh;
-        }
+        @media (max-width: 480px) { .floating-card { display: none; } }
     </style>
 </head>
-<body>
+<body class="splash-only">
+
     <div class="floating-card"></div>
     <div class="floating-card"></div>
     <div class="floating-card"></div>
@@ -334,131 +66,69 @@
             Experience Balatro with physical NFC cards.<br>
             Tap your cards to interact with the digital world.
         </p>
-        <button id="startGameButton" class="start-button">
-            Start Game
-        </button>
+        <button id="startGameButton" class="start-button">Start Game</button>
     </div>
 
     <div id="calculator-ui">
+        <div id="animation-container">
+            <video id="animation-player" width="400" height="400" muted playsinline></video>
+        </div>
+        <div id="status-display">Game Started! Tap a Joker.</div>
         <div id="mainContainer">
             <div id="containerLeft">
-                <h2>Game Interface</h2>
-                <p>Your calculator UI will appear here after clicking Start Game.</p>
+                <div class="toggleArea" style="margin-bottom: 1em"><div id="toggleJoker" class="handLevel"><span id="toggleJokerBtn" class="lvlBtn" onclick="toggleJoker()">X</span><span class="handName">Optimize Jokers (slow)</span></div></div>
+                <div class="toggleArea" style="margin-bottom: 1em"><div id="toggleCard" class="handLevel"><span id="toggleCardBtn" class="lvlBtn" onclick="toggleCard()">X</span><span class="handName">Optimize Hand (slow)</span></div></div>
+                <div id="jokerArea"></div>
+                <span class='limitText'><span id='jokerLimit'>0</span>/7</span><br>
+                <div id="scoreOfPlay" style="font-size: 2em"><div id="bestPlayName">High Card<span class="nameLvl"> lvl.1</span></div><div id="bestPlayScore"><span class="chipIcon"></span>5</div><div id="bestPlayScoreX" class="levelStat" style="position: static; margin: auto; margin-top: 0.125em;"><span id="scoreChips" class="levelStatB">5</span>X<span id="scoreMult" class="levelStatR">1</span></div></div>
+                <div id="bestPlay"></div>
+                <div id="cardsInHand"></div>
+                <span class='limitText'><span id='handLimit'>0</span>/8</span><br>
+                <div class="toggleArea" style="margin-bottom: 1em">
+                    <div id="toggleMinimize" class="handLevel"><span id="toggleMinimizeBtn" class="lvlBtn" onclick="toggleMinimize()">&nbsp;</span><span class="handName">Minimize Score</span></div>
+                    <div id="toggleTheFlint" class="handLevel"><span id="toggleTheFintBtn" class="lvlBtn" onclick="toggleTheFlint()">&nbsp;</span><span class="handName">The Flint</span></div>
+                    <div id="toggleTheEye" class="handLevel"><span id="toggleTheEyeBtn" class="lvlBtn" onclick="toggleTheEye()">&nbsp;</span><span class="handName">Can't play checked hands (The Eye)</span></div>
+                    <div id="togglePlasma" class="handLevel"><span id="togglePlasmaBtn" class="lvlBtn" onclick="togglePlasma()">&nbsp;</span><span class="handName">Plasma Deck</span></div>
+                    <div id="toggleObservatory" class="handLevel"><span id="toggleObservatoryBtn" class="lvlBtn" onclick="toggleObservatory()">&nbsp;</span><span class="handName">Observatory</span></div>
+                    <div id="consumables" style="display: none"></div>
+                </div>
+                <button type="button" class="resetBtn" onClick="playHand()">Play hand</button>
+                <button type="button" class="resetBtn" onClick="clearHand()">Clear hand</button>
+                <button type="button" class="resetBtn" onClick="resetHand()">Reset</button>
             </div>
+            <div id="containerRight">
+                <div class="menuBtns"><span class="menuBtn" id="JokersBtn">Jokers</span><span class="menuBtn" id="CardsBtn">Cards</span><span class="menuBtn" id="HandsBtn">Hands</span><span class="menuBtn" id="BreakdownBtn">Breakdown</span><span class="menuBtn" id="ModifyJokerBtn" style="display: none;">Edit</span></div>
+                <div id="Jokers"><div style="text-align: center;"><div id="jokerCount" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementJokerCount(-1)">-</span><span class="lvlBtn" onclick="incrementJokerCount( 0)">1</span><span class="lvlBtn" onclick="incrementJokerCount( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Count</span><span contenteditable="true" id="jokerCnt" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setJokerCount()" onfocus="selectAll(this)">1</span></div></div><div style="text-align: center;"><div id="jokerValue" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementJokerValue(-1)">-</span><span class="lvlBtn" onclick="incrementJokerValue( 0)">0</span><span class="lvlBtn" onclick="incrementJokerValue( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Value</span><span contenteditable="true" id="jokerVal" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setJokerValue()" onfocus="selectAll(this)">0</span></div></div><div style="text-align: center;"><div id="jokerSearch" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Search</span><input id="SearchVal" class="handLvl" type="text" oninput="searchJoker()" placeholder="Joker Name" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;"></div></div><div id="jokerModifiers" style="text-align: center;"></div><div id="jokers" style="text-align: center"></div></div>
+                <div id="Cards"><div style="text-align: center;"><div id="cardCount" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementCardCount(-1)">-</span><span class="lvlBtn" onclick="incrementCardCount( 0)">1</span><span class="lvlBtn" onclick="incrementCardCount( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Count</span><span contenteditable="true" id="cardCnt" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setCardCount()" onfocus="selectAll(this)">1</span></div></div><div id="handModifiers" style="text-align: center;width:100%;"></div><div id="cards" style="text-align: center"></div><div style="text-align: center;"><div class="handLevel"><span id="highContrastBtn" class="lvlBtn">&nbsp;</span><span class="handName">High Contrast</span></div></div></div>
+                <div id="Hands"><div id="hands" style="text-align: center"></div><button type="button" class="resetBtn" onclick="invertPlayedHands()" style="margin-top:0.5em">Invert played hands</button></div>
+                <div id="Breakdown"></div>
+                <div id="ModifyJoker"><div style="text-align: center;"><div id="modifyJokerValue" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementModifyJokerValue(-1)">-</span><span class="lvlBtn" onclick="incrementModifyJokerValue( 0)">0</span><span class="lvlBtn" onclick="incrementModifyJokerValue( 1)">+</span><span id="modValue" style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Value</span><span contenteditable="true" id="modifyJokerVal" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setModifyJokerValue()">0</span></div></div><div style="text-align: center;"><div id="modifyJokerSellValue" class="handLevel" style="display: inline-block; width: auto; margin: 0.2em; min-width: 0"><span class="lvlBtn" onclick="incrementModifyJokerSellValue(-1)">-</span><span class="lvlBtn" onclick="incrementModifyJokerSellValue( 0)">0</span><span class="lvlBtn" onclick="incrementModifyJokerSellValue( 1)">+</span><span style="display: block; float: left; margin-left: 0.7em; margin-right:0.5em;margin-top: 0.125em;">Sell</span><span contenteditable="true" id="modifyJokerSellVal" class="handLvl" style="width: auto; padding-left: 0.25em; padding-right: 0.25em; min-width: 2.5em;" oninput="setModifyJokerSellValue()">0</span></div></div><div id="modifyJokerModifiers" style="text-align: center;"></div><div id="modifyJoker" style="text-align: center"></div></div>
+            </div>
+        </div>
+        <div id="footer">
+            <a href='https://www.playbalatro.com/' alt='Balatro Website'><img src='assets/Balatro logo-new.png' style='height: 3em;'></a><br>
+            <a href='https://www.github.com/EFHIII/balatro-calculator'>view code on GitHub</a>
         </div>
     </div>
 
+    <audio id="background-music" loop src="assets/Balatro Main Theme.mp3"></audio>
+    <audio id="play-hand-sfx" src="sfx/your-sound-effect.wav"></audio>
+
+    <script type="text/javascript" src="hoverCard.js"></script>
+    <script type="text/javascript" src="cards.js"></script>
+    <script type="text/javascript" src="breakdown.js"></script>
+    <script type="text/javascript" src="manageWorkers.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="hand-url.js"></script>
+    <script src="nfc_handler.js"></script>
+
     <script>
-        // Joker database from your provided data - first 50 common jokers
-        const jokerDatabase = [
-            // Row 0
-            { name: "Joker", pos: [0, 0] },
-            { name: "Chaos the Clown", pos: [1, 0] },
-            { name: "Jolly Joker", pos: [2, 0] },
-            { name: "Zany Joker", pos: [3, 0] },
-            { name: "Mad Joker", pos: [4, 0] },
-            { name: "Crazy Joker", pos: [5, 0] },
-            { name: "Droll Joker", pos: [6, 0] },
-            { name: "Half Joker", pos: [7, 0] },
-            { name: "Merry Andy", pos: [8, 0] },
-            { name: "Stone Joker", pos: [9, 0] },
-            
-            // Row 1
-            { name: "Juggler", pos: [0, 1] },
-            { name: "Drunkard", pos: [1, 1] },
-            { name: "Acrobat", pos: [2, 1] },
-            { name: "Sock and Buskin", pos: [3, 1] },
-            { name: "Mime", pos: [4, 1] },
-            { name: "Credit Card", pos: [5, 1] },
-            { name: "Greedy Joker", pos: [6, 1] },
-            { name: "Lusty Joker", pos: [7, 1] },
-            { name: "Wrathful Joker", pos: [8, 1] },
-            { name: "Gluttonous Joker", pos: [9, 1] },
-            
-            // Row 2
-            { name: "Troubadour", pos: [0, 2] },
-            { name: "Banner", pos: [1, 2] },
-            { name: "Mystic Summit", pos: [2, 2] },
-            { name: "Marble Joker", pos: [3, 2] },
-            { name: "Loyalty Card", pos: [4, 2] },
-            { name: "Hack", pos: [5, 2] },
-            { name: "Misprint", pos: [6, 2] },
-            { name: "Steel Joker", pos: [7, 2] },
-            { name: "Raised Fist", pos: [8, 2] },
-            { name: "Golden Joker", pos: [9, 2] },
-        ];
-
-        // Playing card database matching the 8BitDeck sprite sheet
-        const playingCardDatabase = [
-            // Spades (row 0)
-            { suit: "Spades", rank: "A", pos: [0, 0] },
-            { suit: "Spades", rank: "2", pos: [1, 0] },
-            { suit: "Spades", rank: "3", pos: [2, 0] },
-            { suit: "Spades", rank: "4", pos: [3, 0] },
-            { suit: "Spades", rank: "5", pos: [4, 0] },
-            { suit: "Spades", rank: "6", pos: [5, 0] },
-            { suit: "Spades", rank: "7", pos: [6, 0] },
-            { suit: "Spades", rank: "8", pos: [7, 0] },
-            { suit: "Spades", rank: "9", pos: [8, 0] },
-            { suit: "Spades", rank: "10", pos: [9, 0] },
-            { suit: "Spades", rank: "J", pos: [10, 0] },
-            { suit: "Spades", rank: "Q", pos: [11, 0] },
-            { suit: "Spades", rank: "K", pos: [12, 0] },
-            
-            // Hearts (row 1) 
-            { suit: "Hearts", rank: "A", pos: [0, 1] },
-            { suit: "Hearts", rank: "2", pos: [1, 1] },
-            { suit: "Hearts", rank: "3", pos: [2, 1] },
-            { suit: "Hearts", rank: "4", pos: [3, 1] },
-            { suit: "Hearts", rank: "5", pos: [4, 1] },
-            { suit: "Hearts", rank: "6", pos: [5, 1] },
-            { suit: "Hearts", rank: "7", pos: [6, 1] },
-            { suit: "Hearts", rank: "8", pos: [7, 1] },
-            { suit: "Hearts", rank: "9", pos: [8, 1] },
-            { suit: "Hearts", rank: "10", pos: [9, 1] },
-            { suit: "Hearts", rank: "J", pos: [10, 1] },
-            { suit: "Hearts", rank: "Q", pos: [11, 1] },
-            { suit: "Hearts", rank: "K", pos: [12, 1] },
-            
-            // Diamonds (row 2)
-            { suit: "Diamonds", rank: "A", pos: [0, 2] },
-            { suit: "Diamonds", rank: "2", pos: [1, 2] },
-            { suit: "Diamonds", rank: "3", pos: [2, 2] },
-            { suit: "Diamonds", rank: "4", pos: [3, 2] },
-            { suit: "Diamonds", rank: "5", pos: [4, 2] },
-            { suit: "Diamonds", rank: "6", pos: [5, 2] },
-            { suit: "Diamonds", rank: "7", pos: [6, 2] },
-            { suit: "Diamonds", rank: "8", pos: [7, 2] },
-            { suit: "Diamonds", rank: "9", pos: [8, 2] },
-            { suit: "Diamonds", rank: "10", pos: [9, 2] },
-            { suit: "Diamonds", rank: "J", pos: [10, 2] },
-            { suit: "Diamonds", rank: "Q", pos: [11, 2] },
-            { suit: "Diamonds", rank: "K", pos: [12, 2] },
-            
-            // Clubs (row 3)
-            { suit: "Clubs", rank: "A", pos: [0, 3] },
-            { suit: "Clubs", rank: "2", pos: [1, 3] },
-            { suit: "Clubs", rank: "3", pos: [2, 3] },
-            { suit: "Clubs", rank: "4", pos: [3, 3] },
-            { suit: "Clubs", rank: "5", pos: [4, 3] },
-            { suit: "Clubs", rank: "6", pos: [5, 3] },
-            { suit: "Clubs", rank: "7", pos: [6, 3] },
-            { suit: "Clubs", rank: "8", pos: [7, 3] },
-            { suit: "Clubs", rank: "9", pos: [8, 3] },
-            { suit: "Clubs", rank: "10", pos: [9, 3] },
-            { suit: "Clubs", rank: "J", pos: [10, 3] },
-            { suit: "Clubs", rank: "Q", pos: [11, 3] },
-            { suit: "Clubs", rank: "K", pos: [12, 3] },
-        ];
-
+        const jokerDatabase = [ { pos: [0, 0] }, { pos: [1, 0] }, { pos: [2, 0] }, { pos: [3, 0] }, { pos: [4, 0] }, { pos: [5, 0] }, { pos: [6, 0] }, { pos: [7, 0] }, { pos: [8, 0] }, { pos: [9, 0] }, { pos: [0, 1] }, { pos: [1, 1] }, { pos: [2, 1] }, { pos: [3, 1] }, { pos: [4, 1] }, { pos: [5, 1] }, { pos: [6, 1] }, { pos: [7, 1] }, { pos: [8, 1] }, { pos: [9, 1] } ];
+        const playingCardDatabase = [ { pos: [0, 0] }, { pos: [1, 0] }, { pos: [2, 0] }, { pos: [3, 0] }, { pos: [4, 0] }, { pos: [5, 0] }, { pos: [6, 0] }, { pos: [7, 0] }, { pos: [8, 0] }, { pos: [9, 0] }, { pos: [10, 0] }, { pos: [11, 0] }, { pos: [12, 0] }, { pos: [0, 1] }, { pos: [1, 1] }, { pos: [2, 1] }, { pos: [3, 1] }, { pos: [4, 1] }, { pos: [5, 1] }, { pos: [6, 1] }, { pos: [7, 1] }, { pos: [8, 1] }, { pos: [9, 1] }, { pos: [10, 1] }, { pos: [11, 1] }, { pos: [12, 1] } ];
+        
         function initializeFloatingCards() {
             const cards = document.querySelectorAll('.floating-card');
-            
-            cards.forEach((card) => {
-                updateCardDisplay(card);
-            });
-
-            // Update cards periodically
+            cards.forEach(card => updateCardDisplay(card));
             setInterval(() => {
                 const randomCardEl = cards[Math.floor(Math.random() * cards.length)];
                 updateCardDisplay(randomCardEl);
@@ -466,36 +136,19 @@
         }
 
         function updateCardDisplay(cardElement) {
-            const isJoker = Math.random() > 0.4; // 60% chance for joker, 40% for playing card
-            
+            const isJoker = Math.random() > 0.4;
             if (isJoker) {
                 const randomJoker = jokerDatabase[Math.floor(Math.random() * jokerDatabase.length)];
-                const x = randomJoker.pos[0] * -71;
-                const y = randomJoker.pos[1] * -94;
-                
-                cardElement.style.backgroundPosition = `${x}px ${y}px`;
-                cardElement.title = randomJoker.name;
+                cardElement.style.backgroundPosition = `${randomJoker.pos[0] * -71}px ${randomJoker.pos[1] * -94}px`;
                 cardElement.className = 'floating-card joker';
             } else {
                 const randomCard = playingCardDatabase[Math.floor(Math.random() * playingCardDatabase.length)];
-                const x = randomCard.pos[0] * -71;
-                const y = randomCard.pos[1] * -94;
-                
-                cardElement.style.backgroundPosition = `${x}px ${y}px`;
-                cardElement.title = `${randomCard.rank} of ${randomCard.suit}`;
+                const randomSuitRow = Math.floor(Math.random() * 4);
+                cardElement.style.backgroundPosition = `${randomCard.pos[0] * -71}px ${randomSuitRow * -95}px`;
                 cardElement.className = 'floating-card playing-card';
             }
         }
 
-        document.getElementById('startGameButton').addEventListener('click', function() {
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('calculator-ui').style.display = 'block';
-            console.log('Game started!');
-        });
-
-        window.addEventListener('load', initializeFloatingCards);
-
-        // Parallax effect for floating cards
         document.addEventListener('mousemove', function(e) {
             const cards = document.querySelectorAll('.floating-card');
             cards.forEach((card, index) => {
@@ -506,6 +159,8 @@
                 card.style.setProperty('--parallax-y', `${y}px`);
             });
         });
+        
+        window.addEventListener('load', initializeFloatingCards);
     </script>
 </body>
 </html>
