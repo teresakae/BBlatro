@@ -1254,16 +1254,8 @@ function playAnimation(videoPath) {
     videoPlayer.play();
 }
 
-
-// Your other new functions (processNfcTap, addScannedJoker) go here...
-function processNfcTap(scannedID) {
-    // ...
-}
-function addScannedJoker(jokerName) {
-    // ...
-}
 /**
- * Main entry point for processing an NFC card tap.
+ * processing an NFC card tap.
  * Called by the nfc_handler.js
  * @param {string} scannedID - The text data read from the NFC tag (e.g., "joker:Greedy Joker").
  */
@@ -1276,12 +1268,11 @@ function processNfcTap(scannedID) {
         // --- Animation Logic ---
         // Create a simple name for the video file, e.g., "Greedy Joker" -> "greedy_joker.mp4"
         const videoFileName = cardName.toLowerCase().replace(/ /g, '_') + '.mp4';
-        playAnimation('animations/' + videoFileName); // Assumes videos are in an 'animations' folder
+        playAnimation('assets/' + videoFileName); 
 
         // --- Game Logic ---
         addScannedJoker(cardName);
     } 
-    // You can add logic for "planet" cards here later if you want.
 }
 
 /**
