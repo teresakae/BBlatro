@@ -1,0 +1,223 @@
+/* FONT DEFINITION */
+@font-face {
+    font-family: 'm6x11Plus';
+    src: url('assets/m6x11plus.ttf') format('truetype');
+}
+
+/* GENERAL STYLES */
+body {
+    background-color: #3a5055;
+    color: #fff;
+    font-family: 'm6x11Plus', monospace;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+div {
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    transition-duration: 0.3s;
+}
+
+a:hover {
+    color: #dfe;
+}
+
+/* LAYOUT CONTAINERS */
+#containerLeft, #containerRight {
+    position: static;
+    width: 100%;
+}
+
+#containerLeft {
+    text-align: center;
+}
+
+#mainContainer {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100%;
+}
+
+#footer {
+    width: 100%;
+    text-align: center;
+    margin: 0.5em;
+    margin-top: auto;
+}
+
+/* DESKTOP LAYOUT MEDIA QUERY */
+@media (min-width: 850px) and (min-height: 350px) {
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+    }
+    #containerLeft, #containerRight {
+        width: 50%;
+    }
+}
+
+/* MENU BUTTONS */
+.menuBtn {
+    display: block;
+    float: left;
+    font-size: 22px;
+    width: 25%;
+    background-color: #333;
+    text-align: center;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+    user-select: none;
+    cursor: pointer;
+}
+
+.menuBtn:hover, .active {
+    background-color: #222;
+}
+
+/* CARD STYLES */
+.jokerCard, .playingCard, .playfieldCard, .modifierCard, .jmodifierCard {
+    position: relative;
+    display: inline-block;
+    width: 71px;
+    height: 95px;
+    margin: 0.25em;
+    padding: 0;
+    image-rendering: pixelated;
+    cursor: pointer;
+    z-index: 1;
+    vertical-align: top;
+    border-radius: 6px;
+    box-shadow: 0em 0.2em 0em #686e78;
+    transition: transform 0.1s ease-out;
+}
+
+.jokerCard:hover, .playingCard:hover, .modifierCard:hover, .jmodifierCard:hover {
+    transform: scale(1.1);
+    z-index: 2;
+}
+
+.selected {
+    transform: scale(1.1);
+    outline: 3px solid #ffcc00;
+    outline-offset: 2px;
+}
+
+/* UI ELEMENTS */
+.handLevel {
+    margin: auto;
+    font-size: 22px;
+    background-color: #a3acb9;
+    padding: 0.2em;
+    margin-top: 0.5em;
+    box-shadow: 0em 0.2em 0em #686e78;
+    border-radius: 0.6em;
+    text-align: center;
+    height: 1.4em;
+    min-width: 22em;
+    max-width: calc(100% - 3em);
+    white-space: nowrap;
+}
+
+.handName {
+    float: left;
+    margin-left: 0.5em;
+    user-select: none;
+}
+
+.lvlBtn {
+    float: left;
+    margin-left: 0.2em;
+    margin-top: -0.1em;
+    background-color: #d1d6de;
+    border-radius: 0.4em;
+    min-width: 1.5em;
+    user-select: none;
+    box-shadow: 0em 0.2em 0em #686e78;
+    cursor: pointer;
+}
+
+.lvlBtn:active {
+    margin-top: 0.1em;
+    box-shadow: none;
+}
+
+.handLvl {
+    float: right;
+    margin-right: 0.5em;
+    background-color: #d1d6de;
+    border-radius: 0.4em;
+    min-width: 2.5em;
+}
+
+.levelStat {
+    float: right;
+    position: absolute;
+    right: 1.5em;
+    margin-top: 0.125em;
+    font-size: 16px;
+}
+
+.levelStatB { color: #009dff; }
+.levelStatR { color: #ff4d40; }
+
+.limitText {
+    font-size: 22px;
+    color: #d1d6de;
+    text-shadow: 2px 2px #333;
+}
+
+.resetBtn {
+    background-color: #ff4d40;
+    color: white;
+    font-family: inherit;
+    font-size: 32px;
+    padding: 0.2em;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0.2em;
+    vertical-align: middle;
+    border: none;
+    box-shadow: 0em 0.15em 0em #c00;
+}
+
+.resetBtn:active {
+    margin-top: 0.35em;
+    box-shadow: none;
+}
+
+/* TOOLTIP STYLES */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
